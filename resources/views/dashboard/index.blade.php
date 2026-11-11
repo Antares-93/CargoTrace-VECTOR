@@ -1,0 +1,562 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="space-y-5">
+
+    <!-- 1. Next Port Berthing Alert / Countdown Ticker (matching Image 6) -->
+    <div class="bg-[#121B2B] border border-[#233550] rounded-xl p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 bg-cyan-950 text-cyan-400 border border-cyan-700/60 font-mono text-[11px] font-bold rounded-md tracking-wider whitespace-nowrap">
+                NEXT PORT BERTHING
+            </span>
+            <div class="text-xs sm:text-sm font-semibold text-slate-200">
+                @if ($metrics['next_berthing'])
+                    <span class="text-white font-bold">{{ $metrics['next_berthing']->destination->name }} ({{ $metrics['next_berthing']->destination->code }})</span>
+                    • <span class="text-slate-400">{{ $metrics['next_berthing']->berth_number ?? 'Berth 402' }}</span>
+                    <span class="text-slate-500 text-xs hidden sm:inline">(Vessel {{ $metrics['next_berthing']->vessel_or_flight }})</span>
+                @else
+                    <span class="text-white font-bold">Port of Rotterdam (NLRTM)</span> • Berth 402 (Vessel Maersk Mc-Kinney Moller)
+                @endif
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 sm:gap-4 font-mono text-xs">
+            <div class="flex items-center gap-2 bg-[#090D15] px-3 py-1.5 rounded-lg border border-[#1E293B]">
+                <span class="text-slate-400 text-[10px] uppercase font-bold">ETA COUNTDOWN</span>
+                <span id="berthing-countdown" class="text-cyan-400 font-bold tracking-wider">15h 42m 19s</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-1.5 text-slate-400 text-[11px]">
+                <span class="uppercase">SCHEDULED:</span>
+                <span class="text-slate-200 font-semibold">
+                    {{ $metrics['next_berthing'] ? $metrics['next_berthing']->expected_arrival->format('d M Y') : '04 NOV 2026' }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Filters & Consignment Action Bar (matching Image 6) -->
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        
+        <!-- Filter Pills -->
+        <div class="flex items-center gap-1.5 bg-[#121A28] border border-[#1F2C42] p-1 rounded-xl overflow-x-auto">
+            <a href="{{ route('dashboard', ['filter' => 'all', 'search' => request('search')]) }}" 
+               class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition whitespace-nowrap {{ ($filters['filter'] ?? 'all') === 'all' ? 'bg-[#1E2C44] text-white shadow' : 'text-slate-400 hover:text-white' }}">
+                All Consignments
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'ocean', 'search' => request('search')]) }}" 
+               class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition whitespace-nowrap {{ ($filters['filter'] ?? '') === 'ocean' ? 'bg-cyan-950 text-cyan-300 border border-cyan-700/50' : 'text-slate-400 hover:text-white' }}">
+                Ocean Lines
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'air', 'search' => request('search')]) }}" 
+               class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition whitespace-nowrap flex items-center gap-1.5 {{ ($filters['filter'] ?? '') === 'air' ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/50' : 'text-slate-400 hover:text-white' }}">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                Air Express
+            </a>
+            <a href="{{ route('dashboard', ['filter' => 'delay', 'search' => request('search')]) }}" 
+               class="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wider transition whitespace-nowrap flex items-center gap-1.5 {{ ($filters['filter'] ?? '') === 'delay' ? 'bg-amber-950 text-amber-300 border border-amber-700/50' : 'text-slate-400 hover:text-white' }}">
+                Exceptions (Delay)
+            </a>
+        </div>
+
+        <!-- Search Bar and Action Button -->
+        <div class="flex items-center gap-2">
+            <form action="{{ route('dashboard') }}" method="GET" class="relative flex-1 sm:w-80">
+                <input type="hidden" name="filter" value="{{ $filters['filter'] ?? 'all' }}">
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       placeholder="Search B/L, AWB, Carrier, Port..."
+                       class="w-full bg-[#121A28] border border-[#1F2C42] rounded-xl px-3.5 py-1.5 pl-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                <svg class="w-4 h-4 text-slate-500 absolute left-3 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </form>
+
+            @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
+            <a href="{{ route('shipments.create') }}" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-700/20 flex items-center gap-1.5 whitespace-nowrap transition">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>New Manifest</span>
+            </a>
+            @endif
+        </div>
+
+    </div>
+
+    <!-- 3. Upper Grid: Live GIS AIS & ADS-B Radar (Left) + Sensor & Incident Desk (Right) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        
+        <!-- Left: GIS Interactive Radar Map Container (matching Image 6) -->
+        <div class="lg:col-span-8 bg-[#121A28] border border-[#1F2C42] rounded-2xl p-4 flex flex-col justify-between shadow-xl">
+            
+            <!-- Map Header with Status Badges -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-mono font-bold text-cyan-400 flex items-center gap-1.5 uppercase">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                        LIVE GIS AIS &amp; ADS-B RADAR
+                    </span>
+                    <span class="text-[11px] text-slate-400 font-mono">
+                        FOCUS: <strong class="text-slate-200">{{ $leadShipment->shipment_number ?? 'MSK-14' }} ({{ $leadShipment->origin->code ?? 'IDTPP' }} &rarr; {{ $leadShipment->destination->code ?? 'NLRTM' }})</strong>
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2 font-mono text-[11px]">
+                    <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/50 font-bold">
+                        AIR: {{ $leadShipment->air_speed_kts ?? 485 }} KTS
+                    </span>
+                    <span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-700/50 font-bold">
+                        SEA DELAY: +{{ $leadShipment->delay_hours ?? 28 }}H
+                    </span>
+                </div>
+            </div>
+
+            <!-- Leaflet Radar Map Viewport -->
+            <div class="relative w-full h-[370px] sm:h-[420px] rounded-xl overflow-hidden border border-[#1E293B] shadow-inner bg-[#0B0F17]">
+                <div id="radar-map" class="w-full h-full"></div>
+
+                <!-- Custom Map Modes Legend Overlay (matching Image 6) -->
+                <div class="absolute bottom-3 right-3 bg-[#0F172A]/90 backdrop-blur-md border border-[#233550] rounded-lg p-2.5 text-[10px] font-mono space-y-1.5 shadow-2xl z-[1000]">
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">Modes Legend</div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-0.5 bg-cyan-400"></span>
+                        <span class="text-slate-200">Ocean Vessel (Jakarta &rarr; Suez)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-0.5 border-t border-dashed border-amber-400"></span>
+                        <span class="text-slate-300">Remaining Ocean (Suez &rarr; RTM)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="w-4 h-0.5 bg-emerald-400"></span>
+                        <span class="text-slate-200">Air Freight (SIN &rarr; FRA)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Telemetry Bar Under Map (matching Image 6) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 mt-3 border-t border-[#1E293B] font-mono text-xs">
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Tracked Cargo Manifest</span>
+                    <span class="text-slate-200 font-semibold">Ocean Container &amp; Air Express</span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Combined Payload</span>
+                    <span class="text-white font-bold">31,900.50 KG <span class="text-slate-400 text-[10px]">(Sea + Air)</span></span>
+                </div>
+                <div>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider block">Air Delivery ETA</span>
+                    <span class="text-emerald-400 font-bold">Today • 21:30 UTC</span>
+                </div>
+            </div>
+
+            <!-- Voyage Milestones Ocean Lead Progress (matching Image 6) -->
+            <div class="pt-3 mt-3 border-t border-[#1E293B]">
+                <div class="flex items-center justify-between text-xs mb-2">
+                    <span class="font-bold uppercase tracking-wider text-slate-400 text-[10px]">Voyage Milestones (Ocean Lead)</span>
+                    <span class="font-mono text-cyan-400 text-[11px] font-bold">
+                        Stage {{ $leadShipment->current_stage ?? 3 }} of {{ $leadShipment->total_stages ?? 4 }} Active
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                    <!-- Stage 1 -->
+                    <div class="bg-[#162235] border border-[#233550] rounded-lg p-2 {{ ($leadShipment->current_stage ?? 3) >= 1 ? 'border-emerald-500/50' : 'opacity-60' }}">
+                        <span class="text-[9px] text-slate-400 uppercase font-mono block">Stage 1</span>
+                        <span class="text-xs font-bold text-white block">{{ $leadShipment->origin->name ?? 'Tanjung Priok' }}</span>
+                        <span class="text-[10px] text-emerald-400 font-mono font-semibold">&#10003; Departed</span>
+                    </div>
+
+                    <!-- Stage 2 -->
+                    <div class="bg-[#162235] border border-[#233550] rounded-lg p-2 {{ ($leadShipment->current_stage ?? 3) >= 2 ? 'border-emerald-500/50' : 'opacity-60' }}">
+                        <span class="text-[9px] text-slate-400 uppercase font-mono block">Stage 2</span>
+                        <span class="text-xs font-bold text-white block">Singapore Hub</span>
+                        <span class="text-[10px] text-emerald-400 font-mono font-semibold">&#10003; Cleared</span>
+                    </div>
+
+                    <!-- Stage 3 (Active) -->
+                    <div class="bg-cyan-950/60 border-2 border-cyan-400 rounded-lg p-2 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
+                        <span class="text-[9px] text-cyan-300 uppercase font-mono font-bold block">Stage 3</span>
+                        <span class="text-xs font-bold text-white block">Suez Canal</span>
+                        <span class="text-[10px] text-amber-400 font-mono font-bold">Anchored (Wait)</span>
+                    </div>
+
+                    <!-- Stage 4 -->
+                    <div class="bg-[#162235] border border-[#233550] rounded-lg p-2 opacity-60">
+                        <span class="text-[9px] text-slate-400 uppercase font-mono block">Stage 4</span>
+                        <span class="text-xs font-bold text-white block">{{ $leadShipment->destination->name ?? 'Rotterdam Hub' }}</span>
+                        <span class="text-[10px] text-slate-400 font-mono">Scheduled</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right: Telemetry & Incident Cards Column (matching Image 6) -->
+        <div class="lg:col-span-4 flex flex-col gap-4">
+            
+            <!-- Active Incident Notice Card (Image 6) -->
+            <div class="bg-[#121A28] border border-amber-600/40 rounded-2xl p-4 shadow-xl relative overflow-hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="flex items-center gap-2 text-xs font-mono font-bold text-amber-400 uppercase">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                        Active Incident Notice
+                    </span>
+                    <span class="px-2 py-0.5 rounded bg-red-950 text-red-300 border border-red-700/60 text-[10px] font-mono font-bold uppercase">
+                        High
+                    </span>
+                </div>
+
+                <h3 class="text-base font-bold text-white tracking-tight">Suez Canal Convoy Delay</h3>
+                <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+                    Queue congestion at Suez entrance. Vessel delayed by <strong class="text-amber-400">+28 hours</strong>. Air flight QR-803F operating normally.
+                </p>
+
+                <div class="flex items-center justify-between mt-4 pt-3 border-t border-[#1E293B] text-[11px] font-mono">
+                    <span class="text-slate-400">Detected 9h ago</span>
+                    @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
+                    <a href="{{ route('exceptions.index') }}" class="text-cyan-400 hover:text-cyan-300 font-semibold hover:underline flex items-center gap-1">
+                        View Case Desk &rarr;
+                    </a>
+                    @else
+                    <span class="text-amber-400 font-bold">Investigating</span>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Reefer Container Sensors Card (Image 6) -->
+            <div class="bg-[#121A28] border border-[#1F2C42] rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono font-bold text-slate-300 uppercase flex items-center gap-2">
+                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        Reefer Container Sensors
+                    </span>
+                    <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/50 text-[10px] font-mono font-bold">
+                        Normal
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 font-mono">
+                    <div class="bg-[#090D15] border border-[#1E293B] rounded-xl p-3">
+                        <span class="text-[10px] text-slate-400 uppercase block mb-1">Temperature</span>
+                        <div class="text-xl font-black text-white">4.2°C</div>
+                        <span class="text-[10px] text-emerald-400 font-medium">±0.2°C Stable</span>
+                    </div>
+                    <div class="bg-[#090D15] border border-[#1E293B] rounded-xl p-3">
+                        <span class="text-[10px] text-slate-400 uppercase block mb-1">Humidity</span>
+                        <div class="text-xl font-black text-white">62%</div>
+                        <span class="text-[10px] text-cyan-400 font-medium">Optimal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Flight Telemetry (ADS-B) Card (Image 6) -->
+            <div class="bg-[#121A28] border border-[#1F2C42] rounded-2xl p-4 shadow-xl">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-mono font-bold text-slate-300 uppercase flex items-center gap-2">
+                        <span class="text-emerald-400 font-black">+</span>
+                        Flight Telemetry (ADS-B)
+                    </span>
+                    <span class="px-2 py-0.5 rounded bg-[#162235] text-cyan-400 border border-cyan-800/50 text-[10px] font-mono">
+                        QR-772-91024
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 font-mono">
+                    <div class="bg-[#090D15] border border-[#1E293B] rounded-xl p-3">
+                        <span class="text-[10px] text-slate-400 uppercase block mb-1">Flight / Craft</span>
+                        <div class="text-sm font-bold text-white">QR-803F</div>
+                        <span class="text-[10px] text-slate-400">Boeing 777-200F</span>
+                    </div>
+                    <div class="bg-[#090D15] border border-[#1E293B] rounded-xl p-3">
+                        <span class="text-[10px] text-slate-400 uppercase block mb-1">Air Speed &amp; Alt</span>
+                        <div class="text-sm font-bold text-emerald-400">485 Kts</div>
+                        <span class="text-[10px] text-slate-400">FL360 (36,000 ft)</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 4. Key Performance Indicators (4 KPI Cards matching Image 6) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Total Consignments -->
+        <div class="bg-[#121A28] border border-[#1F2C42] rounded-xl p-4 shadow-lg">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                Total Consignments
+            </span>
+            <div class="text-2xl font-black text-white mt-1">
+                {{ $metrics['total_consignments'] }} B/L &amp; AWB
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Active global shipments</div>
+        </div>
+
+        <!-- Partner Carriers -->
+        <div class="bg-[#121A28] border border-[#1F2C42] rounded-xl p-4 shadow-lg">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                Partner Carriers
+            </span>
+            <div class="text-2xl font-black text-cyan-400 mt-1">
+                {{ $metrics['carrier_count'] }} Lines
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Maersk, Evergreen, Qatar, MSC</div>
+        </div>
+
+        <!-- Hubs & Terminals -->
+        <div class="bg-[#121A28] border border-[#1F2C42] rounded-xl p-4 shadow-lg">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                Hubs &amp; Terminals
+            </span>
+            <div class="text-2xl font-black text-emerald-400 mt-1">
+                {{ $metrics['hub_count'] }} Nodes
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Seaports &amp; Air Gateways</div>
+        </div>
+
+        <!-- On-Time Reliability -->
+        <div class="bg-[#121A28] border border-[#1F2C42] rounded-xl p-4 shadow-lg">
+            <span class="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
+                On-Time Reliability
+            </span>
+            <div class="text-2xl font-black text-amber-400 mt-1">
+                {{ $metrics['on_time_reliability'] }}%
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5">Multimodal network rate</div>
+        </div>
+
+    </div>
+
+    <!-- 5. Active Consignment Manifests Table (exact columns matching Image 6) -->
+    <div class="bg-[#121A28] border border-[#1F2C42] rounded-2xl p-5 shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-sm font-bold text-white tracking-wide">Active Consignment Manifests</h3>
+                <p class="text-xs text-slate-400">Click any consignment row to zoom camera and track on the live map</p>
+            </div>
+            <span class="font-mono text-xs text-slate-400 font-semibold bg-[#162235] px-2.5 py-1 rounded border border-[#233550]">
+                {{ $manifests->total() }} RECORDS SHOWN
+            </span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead>
+                    <tr class="border-b border-[#1E293B] text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                        <th class="py-3 px-3">Tracking Identifier</th>
+                        <th class="py-3 px-3">Mode</th>
+                        <th class="py-3 px-3">Consignee &amp; Carrier</th>
+                        <th class="py-3 px-3">Corridor Route</th>
+                        <th class="py-3 px-3">Status</th>
+                        <th class="py-3 px-3">Schedule Impact</th>
+                        <th class="py-3 px-3 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#182338]">
+                    @forelse($manifests as $m)
+                    <tr class="hover:bg-[#162338] transition cursor-pointer group" onclick="focusOnShipment('{{ $m->shipment_number }}', {{ $m->origin->latitude }}, {{ $m->origin->longitude }}, {{ $m->destination->latitude }}, {{ $m->destination->longitude }})">
+                        
+                        <!-- Tracking Identifier -->
+                        <td class="py-3.5 px-3 font-mono font-bold text-cyan-400 group-hover:text-cyan-300">
+                            {{ $m->shipment_number }}
+                        </td>
+
+                        <!-- Mode Badge -->
+                        <td class="py-3.5 px-3">
+                            @if ($m->transport_mode === 'AIR')
+                                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700/50 font-mono text-[10px] font-bold">AIR</span>
+                            @else
+                                <span class="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-700/50 font-mono text-[10px] font-bold">OCEAN</span>
+                            @endif
+                        </td>
+
+                        <!-- Consignee & Carrier -->
+                        <td class="py-3.5 px-3">
+                            <div class="font-semibold text-white">{{ $m->consignee_name ?? $m->customer->name }}</div>
+                            <div class="text-[11px] text-slate-400">{{ $m->carrier->name }}</div>
+                        </td>
+
+                        <!-- Corridor Route -->
+                        <td class="py-3.5 px-3 font-mono">
+                            <div class="text-slate-200 font-bold flex items-center gap-1.5">
+                                <span>{{ $m->origin->code }}</span>
+                                <span class="text-slate-500">&rarr;</span>
+                                <span>{{ $m->destination->code }}</span>
+                            </div>
+                            <div class="text-[10px] text-slate-400 font-sans truncate max-w-[200px]">
+                                {{ $m->origin->name }} to {{ $m->destination->name }}
+                            </div>
+                        </td>
+
+                        <!-- Status Badge -->
+                        <td class="py-3.5 px-3 font-mono">
+                            @php
+                                $statusClasses = match($m->status) {
+                                    'IN_TRANSIT' => 'bg-cyan-950 text-cyan-300 border-cyan-700/50',
+                                    'IN_FLIGHT' => 'bg-emerald-950 text-emerald-300 border-emerald-700/50',
+                                    'BERTHED' => 'bg-teal-950 text-teal-300 border-teal-700/50',
+                                    'DELIVERED' => 'bg-purple-950 text-purple-300 border-purple-700/50',
+                                    default => 'bg-slate-800 text-slate-300 border-slate-700',
+                                };
+                            @endphp
+                            <span class="px-2 py-0.5 rounded border text-[10px] font-bold {{ $statusClasses }}">
+                                {{ str_replace('_', ' ', $m->status) }}
+                            </span>
+                        </td>
+
+                        <!-- Schedule Impact -->
+                        <td class="py-3.5 px-3 font-mono text-xs">
+                            @if ($m->delay_hours > 0)
+                                <span class="text-amber-400 font-bold">+{{ $m->delay_hours }}h Delay</span>
+                            @else
+                                <span class="text-emerald-400 font-bold">On Schedule</span>
+                            @endif
+                        </td>
+
+                        <!-- Action Button -->
+                        <td class="py-3.5 px-3 text-right">
+                            <a href="{{ route('shipments.show', $m) }}" 
+                               class="inline-block px-3 py-1 bg-[#1A273D] hover:bg-emerald-600 hover:text-white text-slate-300 text-xs font-semibold rounded-lg border border-[#233550] transition"
+                               onclick="event.stopPropagation();">
+                                Details
+                            </a>
+                        </td>
+
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-slate-400 text-xs">
+                            No shipments found matching criteria.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-[#1E293B]">
+            {{ $manifests->links() }}
+        </div>
+    </div>
+
+</div>
+@endsection
+
+@push('scripts')
+<script>
+    // Leaflet Radar GIS Map Implementation
+    let map;
+    let markers = [];
+    let polylines = [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Center on maritime corridor (Indian Ocean / Middle East / Mediterranean)
+        map = L.map('radar-map', {
+            zoomControl: true,
+            attributionControl: false
+        }).setView([20.0, 75.0], 3);
+
+        // CartoDB Dark Matter nautical map tiles for high-tech radar aesthetic
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            maxZoom: 18,
+            subdomains: 'abcd',
+        }).addTo(map);
+
+        // Radar Corridor 1: Ocean Lead (Jakarta -> Singapore -> Suez -> Rotterdam)
+        const seaRoute = [
+            [-6.1017, 106.8833], // Tanjung Priok
+            [1.2902, 103.8519],  // Singapore
+            [6.0, 80.0],         // Sri Lanka South Cape
+            [12.5, 50.0],        // Gulf of Aden
+            [29.9737, 32.5599],  // Suez Canal
+            [36.0, 14.0],        // Mediterranean Malta Channel
+            [36.0, -5.5],        // Gibraltar Strait
+            [51.9547, 4.0531]    // Rotterdam
+        ];
+
+        // Cyan route line (Covered)
+        const coveredSea = seaRoute.slice(0, 5);
+        L.polyline(coveredSea, {
+            color: '#38BDF8',
+            weight: 3,
+            opacity: 0.9,
+            smoothFactor: 1
+        }).addTo(map);
+
+        // Amber dashed line (Pending remaining route due to Suez delay)
+        const pendingSea = seaRoute.slice(4);
+        L.polyline(pendingSea, {
+            color: '#F59E0B',
+            dashArray: '6, 8',
+            weight: 2.5,
+            opacity: 0.85
+        }).addTo(map);
+
+        // Radar Corridor 2: Air Express (Singapore Changi -> Frankfurt CargoCity)
+        const airRoute = [
+            [1.3644, 103.9915],  // Singapore
+            [18.5204, 73.8567],  // Cruising Arabian Sea
+            [50.0379, 8.5622]    // Frankfurt
+        ];
+
+        L.polyline(airRoute, {
+            color: '#22C55E',
+            dashArray: '4, 6',
+            weight: 2.5,
+            opacity: 0.95
+        }).addTo(map);
+
+        // Custom Marker Icons
+        const vesselIcon = L.divIcon({
+            className: 'custom-radar-icon',
+            html: `<div class="w-6 h-6 rounded-full bg-cyan-500 border-2 border-white shadow-[0_0_12px_#38bdf8] flex items-center justify-center text-white text-[10px] font-bold">⚓</div>`,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        const planeIcon = L.divIcon({
+            className: 'custom-radar-icon',
+            html: `<div class="w-6 h-6 rounded-full bg-emerald-500 border-2 border-white shadow-[0_0_12px_#22c55e] flex items-center justify-center text-white text-[10px] font-bold">✈</div>`,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        });
+
+        const portIcon = L.divIcon({
+            className: 'custom-port-icon',
+            html: `<div class="w-3.5 h-3.5 rounded-full bg-slate-300 border border-slate-900 shadow"></div>`,
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+        });
+
+        // Add Markers for Major Nodes
+        L.marker([-6.1017, 106.8833], {icon: portIcon}).addTo(map).bindPopup("<b style='color:#000;'>Tanjung Priok (IDTPP)</b><br>Origin Port");
+        L.marker([1.2902, 103.8519], {icon: portIcon}).addTo(map).bindPopup("<b style='color:#000;'>Port of Singapore (SGSIN)</b><br>Hub Node");
+        L.marker([51.9547, 4.0531], {icon: portIcon}).addTo(map).bindPopup("<b style='color:#000;'>Port of Rotterdam (NLRTM)</b><br>Destination Port");
+        L.marker([50.0379, 8.5622], {icon: portIcon}).addTo(map).bindPopup("<b style='color:#000;'>Frankfurt CargoCity (DEFRA)</b><br>Destination Air Hub");
+
+        // Active Vessel at Suez
+        L.marker([29.9737, 32.5599], {icon: vesselIcon}).addTo(map)
+            .bindPopup("<b style='color:#000;'>AT-2026-B8910 (Maersk Line)</b><br>Suez Canal Convoy Anchorage<br><span style='color:red;'>Delay: +28h</span>")
+            .openPopup();
+
+        // Active Plane in Flight
+        L.marker([18.5204, 73.8567], {icon: planeIcon}).addTo(map)
+            .bindPopup("<b style='color:#000;'>AWB-772-91024 (Qatar Cargo)</b><br>Altitude: 36,000 ft | Speed: 485 Kts<br><span style='color:green;'>On Schedule</span>");
+    });
+
+    // Function to fly map to clicked consignment
+    function focusOnShipment(num, lat1, lng1, lat2, lng2) {
+        if (!map) return;
+        const midLat = (lat1 + lat2) / 2;
+        const midLng = (lng1 + lng2) / 2;
+        map.flyTo([midLat, midLng], 4, {duration: 1.5});
+    }
+
+    // Countdown Timer Simulator for Next Port Berthing
+    let totalSeconds = 15 * 3600 + 42 * 60 + 19;
+    setInterval(() => {
+        if (totalSeconds > 0) totalSeconds--;
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        const el = document.getElementById('berthing-countdown');
+        if (el) el.innerText = `${h}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    }, 1000);
+</script>
+@endpush

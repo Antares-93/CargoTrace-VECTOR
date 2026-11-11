@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "cargotrace-vector-api",
+		"name": "CargoTrace - Vector REST API Collection",
+		"description": "Complete Postman API Collection for CargoTrace Global Visibility & Tracking Platform (UAS Web Programming 2)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Logistics Partner Ltd\",\n    \"email\": \"partner@cargotrace.com\",\n    \"password\": \"password123\",\n    \"role\": \"customer\",\n    \"phone\": \"+62 811 2233 4455\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": ["{{base_url}}"],
+							"path": ["register"]
+						}
+					}
+				},
+				{
+					"name": "Login User (Apex Admin)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@cargotrace.com\",\n    \"password\": \"password\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						}
+					}
+				},
+				{
+					"name": "Get Authenticated Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": ["{{base_url}}"],
+							"path": ["user"]
+						}
+					}
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": ["{{base_url}}"],
+							"path": ["logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Shipments",
+			"item": [
+				{
+					"name": "List All Shipments (Filtered & Paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/shipments?mode=all&status=IN_TRANSIT&per_page=10",
+							"host": ["{{base_url}}"],
+							"path": ["shipments"],
+							"query": [
+								{"key": "mode", "value": "all"},
+								{"key": "status", "value": "IN_TRANSIT"},
+								{"key": "per_page", "value": "10"}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Single Shipment Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/shipments/1",
+							"host": ["{{base_url}}"],
+							"path": ["shipments", "1"]
+						}
+					}
+				},
+				{
+					"name": "Create Consignment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shipment_number\": \"AT-2026-N9921\",\n    \"customer_id\": 3,\n    \"carrier_id\": 1,\n    \"origin_id\": 1,\n    \"destination_id\": 4,\n    \"transport_mode\": \"OCEAN\",\n    \"status\": \"BOOKED\",\n    \"expected_departure\": \"2026-11-15 08:00:00\",\n    \"expected_arrival\": \"2026-11-28 14:00:00\",\n    \"consignee_name\": \"PT Samudera Logistik Mitra\",\n    \"vessel_or_flight\": \"Maersk Mc-Kinney Moller\",\n    \"items\": [\n        {\n            \"item_name\": \"Automotive Engine Parts\",\n            \"quantity\": 4,\n            \"weight_kg\": 24500,\n            \"volume_cbm\": 55.4\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/shipments",
+							"host": ["{{base_url}}"],
+							"path": ["shipments"]
+						}
+					}
+				},
+				{
+					"name": "Update Shipment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"vessel_or_flight\": \"Ever Given\",\n    \"notes\": \"Weather delay expected around Suez Canal area\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/shipments/1",
+							"host": ["{{base_url}}"],
+							"path": ["shipments", "1"]
+						}
+					}
+				},
+				{
+					"name": "Delete Shipment (Admin)",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/shipments/12",
+							"host": ["{{base_url}}"],
+							"path": ["shipments", "12"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Tracking Events",
+			"item": [
+				{
+					"name": "Get Tracking Timeline",
+					"request": {
+						"method": "GET",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"url": {
+							"raw": "{{base_url}}/shipments/1/tracking",
+							"host": ["{{base_url}}"],
+							"path": ["shipments", "1", "tracking"]
+						}
+					}
+				},
+				{
+					"name": "Add Tracking Event (Status Transition)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{"key": "Accept", "value": "application/json"},
+							{"key": "Content-Type", "value": "application/json"},
+							{"key": "Authorization", "value": "Bearer {{auth_token}}"}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"IN_TRANSIT\",\n    \"location_id\": 3,\n    \"event_time\": \"2026-11-11 12:00:00\",\n    \"latitude\": 29.9737,\n    \"longitude\": 32.5599,\n    \"description\": \"Vessel awaiting southbound convoy slot clearance at Port Said\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/shipments/1/tracking",
+							"host": ["{{base_url}}"],
+							"path": ["shipments", "1", "tracking"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Carriers & Locations",
+			"item": [
+				{
+					"name": "List Carriers",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{auth_token}}"}],
+						"url": {"raw": "{{base_url}}/carriers", "host": ["{{base_url}}"], "path": ["carriers"]}
+					}
+				},
+				{
+					"name": "List Locations",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{auth_token}}"}],
+						"url": {"raw": "{{base_url}}/locations", "host": ["{{base_url}}"], "path": ["locations"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Exceptions & Incident Desk",
+			"item": [
+				{
+					"name": "List Shipment Exceptions",
+					"request": {
+						"method": "GET",
+						"header": [{"key": "Accept", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{auth_token}}"}],
+						"url": {"raw": "{{base_url}}/shipments/1/exceptions", "host": ["{{base_url}}"], "path": ["shipments", "1", "exceptions"]}
+					}
+				},
+				{
+					"name": "Report Exception",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Accept", "value": "application/json"}, {"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{auth_token}}"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"exception_type\": \"PORT_CONGESTION\",\n    \"severity\": \"HIGH\",\n    \"detected_at\": \"2026-11-11 05:00:00\",\n    \"delay_impact_hours\": 28\n}"
+						},
+						"url": {"raw": "{{base_url}}/shipments/1/exceptions", "host": ["{{base_url}}"], "path": ["shipments", "1", "exceptions"]}
+					}
+				},
+				{
+					"name": "Resolve Exception",
+					"request": {
+						"method": "PATCH",
+						"header": [{"key": "Accept", "value": "application/json"}, {"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{auth_token}}"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"RESOLVED\",\n    \"resolution_notes\": \"Anchor weighed; vessel safely underway towards Port of Rotterdam.\"\n}"
+						},
+						"url": {"raw": "{{base_url}}/exceptions/1", "host": ["{{base_url}}"], "path": ["exceptions", "1"]}
+					}
+				}
+			]
+		}
+	]
+}
