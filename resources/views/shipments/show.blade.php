@@ -539,7 +539,7 @@
             @if ($latest->latitude && $latest->longitude)
                 const currentIcon = L.divIcon({
                     className: 'custom-current-marker',
-                    html: `<div class="w-7 h-7 rounded-full {{ $shipment->transport_mode === 'AIR' ? 'bg-emerald-500' : 'bg-cyan-500' }} border-2 border-white shadow-lg flex items-center justify-center text-white text-xs transform -translate-x-1/2 -translate-y-1/2 font-bold">{{ $shipment->transport_mode === 'AIR' ? '✈' : '⚓' }}</div>`,
+                    html: `<div class="w-7 h-7 rounded-full {{ $shipment->transport_mode === 'AIR' ? 'bg-emerald-600' : 'bg-cyan-600' }} border-2 border-white shadow-lg flex items-center justify-center text-white transform -translate-x-1/2 -translate-y-1/2 font-bold"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $shipment->transport_mode === 'AIR' ? 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' : 'M13 10V3L4 14h7v7l9-11h-7z' }}"/></svg></div>`,
                     iconSize: [0, 0]
                 });
 

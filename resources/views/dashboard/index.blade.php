@@ -34,14 +34,16 @@
         </div>
     </div>
 
-    <!-- 2. Pastel KPI Cards (Matching "Your Assets" in Reference Image 2) -->
+    <!-- 2. Pastel KPI Cards (Matching "Your Assets" in Reference Image 2, No Box Emojis) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
         <!-- Card 1: Total Consignments (Soft Blue) -->
         <div class="bg-[#F0F5FA] dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <span data-i18n="total_consignments">Total Consignments</span>
-                <span class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px]">📦</span>
+                <span class="w-7 h-7 rounded-xl bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </span>
             </div>
             <div class="my-2">
                 <div class="text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -59,7 +61,9 @@
         <div class="bg-[#F3EEFB] dark:bg-purple-950/30 border border-purple-200/60 dark:border-purple-800/40 rounded-3xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <span data-i18n="air_express">Air Express Lanes</span>
-                <span class="w-6 h-6 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 flex items-center justify-center font-bold text-[10px]">✈</span>
+                <span class="w-7 h-7 rounded-xl bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                </span>
             </div>
             <div class="my-2">
                 <div class="text-2xl lg:text-3xl font-extrabold text-purple-900 dark:text-purple-200 tracking-tight">
@@ -77,7 +81,9 @@
         <div class="bg-[#EBF7F0] dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/40 rounded-3xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <span data-i18n="ocean_lines">Ocean Lines Fleet</span>
-                <span class="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center font-bold text-[10px]">⚓</span>
+                <span class="w-7 h-7 rounded-xl bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                </span>
             </div>
             <div class="my-2">
                 <div class="text-2xl lg:text-3xl font-extrabold text-emerald-900 dark:text-emerald-200 tracking-tight">
@@ -95,7 +101,9 @@
         <div class="bg-[#FCF7E8] dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/40 rounded-3xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
             <div class="flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <span data-i18n="ontime_reliability">On-Time Reliability</span>
-                <span class="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300 flex items-center justify-center font-bold text-[10px]">⏱</span>
+                <span class="w-7 h-7 rounded-xl bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 flex items-center justify-center">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </span>
             </div>
             <div class="my-2">
                 <div class="text-2xl lg:text-3xl font-extrabold text-amber-900 dark:text-amber-200 tracking-tight">
@@ -520,16 +528,16 @@
             opacity: 0.95
         }).addTo(map);
 
-        // Custom Marker Icons
+        // Custom Marker Icons (Vector SVG pins)
         const vesselIcon = L.divIcon({
             className: 'custom-vessel-marker',
-            html: `<div class="w-8 h-8 rounded-full bg-cyan-500 border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold transform -translate-x-1/2 -translate-y-1/2">⚓</div>`,
+            html: `<div class="w-8 h-8 rounded-full bg-cyan-600 border-2 border-white shadow-lg flex items-center justify-center text-white transform -translate-x-1/2 -translate-y-1/2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>`,
             iconSize: [0, 0]
         });
 
         const planeIcon = L.divIcon({
             className: 'custom-plane-marker',
-            html: `<div class="w-8 h-8 rounded-full bg-emerald-500 border-2 border-white shadow-lg flex items-center justify-center text-white text-xs font-bold transform -translate-x-1/2 -translate-y-1/2">✈</div>`,
+            html: `<div class="w-8 h-8 rounded-full bg-emerald-600 border-2 border-white shadow-lg flex items-center justify-center text-white transform -translate-x-1/2 -translate-y-1/2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></div>`,
             iconSize: [0, 0]
         });
 

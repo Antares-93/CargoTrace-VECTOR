@@ -52,9 +52,9 @@
         <!-- Right Side: Form (Image 2 style) -->
         <div class="p-6 sm:p-10 flex flex-col justify-center">
             
-            <!-- Mini Logo -->
+            <!-- Mini Logo (Simple, monochrome, uncolored) -->
             <div class="mb-4">
-                <img src="/images/vector-logo-icon.png" alt="Vector" class="w-8 h-8 object-contain">
+                <img src="/images/vector-logo-icon.png" alt="Vector" class="w-8 h-8 object-contain brightness-0 opacity-90">
             </div>
 
             <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Sign in to your account</h1>

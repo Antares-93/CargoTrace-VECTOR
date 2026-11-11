@@ -96,7 +96,7 @@
     </style>
     @stack('styles')
 </head>
-<body class="min-h-screen bg-[#EAEFF5] dark:bg-[#070A10] text-slate-800 dark:text-slate-100 p-2 sm:p-4 lg:p-6 transition-colors duration-200">
+<body class="h-screen w-screen overflow-hidden bg-white dark:bg-[#070A10] text-slate-800 dark:text-slate-100 m-0 p-0 flex flex-col md:flex-row transition-colors duration-200">
 
     <!-- Initialize Theme before DOM paints to prevent flash -->
     <script>
@@ -110,16 +110,18 @@
         }
     </script>
 
-    <!-- Master Tablet Shell Container (exact styling from user's design reference) -->
-    <div class="max-w-[1780px] mx-auto min-h-[92vh] bg-white dark:bg-[#0B0F17] rounded-[28px] sm:rounded-[36px] shadow-2xl border border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row overflow-hidden transition-colors duration-200">
+    <!-- Master Full-Screen Container (Edge-to-Edge) -->
+    <div class="w-full h-full flex flex-col md:flex-row overflow-hidden bg-white dark:bg-[#0B0F17]">
         
-        <!-- Left Vertical Dark Icon Sidebar (matching Image 2) -->
-        <aside class="w-full md:w-20 lg:w-24 bg-[#111625] dark:bg-[#080C14] text-slate-400 p-3 sm:p-4 flex md:flex-col items-center justify-between border-b md:border-b-0 md:border-r border-slate-800 shrink-0 z-30">
+        <!-- Left Vertical Dark Icon Sidebar (Stationary / Fixed, independent scroll if needed) -->
+        <aside class="w-full md:w-20 lg:w-24 md:h-screen bg-[#111625] dark:bg-[#080C14] text-slate-400 p-3 sm:p-4 flex md:flex-col items-center justify-between border-b md:border-b-0 md:border-r border-slate-800/80 shrink-0 z-30 md:overflow-y-auto select-none">
             
-            <!-- Top Logo Badge (Creamy Rounded Box with Vector Icon) -->
+            <!-- Top Logo Badge (Simple, sleek monochrome white on dark dock, no colored tints) -->
             <div class="flex md:flex-col items-center gap-4">
-                <a href="{{ route('dashboard') }}" class="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-[#FBF6E9] dark:bg-emerald-950/70 border border-amber-200/50 dark:border-emerald-600/40 p-2 flex items-center justify-center shadow-md hover:scale-105 transition transform group" title="Vector CargoTrace">
-                    <img src="/images/vector-logo-icon.png" alt="Vector Logo" class="w-full h-full object-contain">
+                <a href="{{ route('dashboard') }}" 
+                   class="w-11 h-11 lg:w-12 lg:h-12 rounded-2xl bg-white/10 dark:bg-white/5 hover:bg-white/15 border border-white/15 flex items-center justify-center p-2.5 shadow-sm transition transform hover:scale-105" 
+                   title="Vector CargoTrace">
+                    <img src="/images/vector-logo-icon.png" alt="Vector Logo" class="w-full h-full object-contain brightness-0 invert opacity-95">
                 </a>
             </div>
 
@@ -195,8 +197,8 @@
             </div>
         </aside>
 
-        <!-- Right Main Panel Container (White/Dark Surface) -->
-        <div class="flex-1 flex flex-col bg-[#F8FAFC] dark:bg-[#0B0F17] overflow-y-auto min-w-0 transition-colors duration-200">
+        <!-- Right Main Panel Container (Scrolls independently while left sidebar stays stationary) -->
+        <div class="flex-1 h-screen overflow-y-auto flex flex-col bg-[#F8FAFC] dark:bg-[#0B0F17] min-w-0 transition-colors duration-200">
             
             <!-- Top Navigation Bar inside Main Content (matching Image 2) -->
             <header class="p-4 sm:p-6 lg:px-8 border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#0B0F17]/90 backdrop-blur-md sticky top-0 z-20 flex flex-wrap items-center justify-between gap-4">
