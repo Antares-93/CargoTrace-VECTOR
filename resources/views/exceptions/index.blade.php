@@ -7,7 +7,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-[#121A28] border border-slate-200/80 dark:border-[#1F2C42] rounded-3xl p-5 sm:p-6 shadow-sm">
         <div>
             <div class="flex items-center gap-3">
-                <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+                <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2" data-i18n="incident_desk_title">
                     <span class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
                     Operational Incident Desk
                 </h1>
@@ -16,24 +16,16 @@
                 </span>
             </div>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Prioritize, investigate, and resolve maritime holds, severe weather diversions, and port convoy congestions.
+                <span data-i18n="incident_desk_sub">Prioritize, investigate, and resolve maritime holds, severe weather diversions, and port convoy congestions.</span>
             </p>
         </div>
 
         <!-- Filter tabs -->
         <div class="flex items-center gap-2 font-mono text-xs">
-            <a href="{{ route('exceptions.index', ['status' => '']) }}" class="px-3 py-1.5 rounded-xl border transition {{ !request('status') ? 'bg-slate-900 text-white dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}">
-                All
-            </a>
-            <a href="{{ route('exceptions.index', ['status' => 'OPEN']) }}" class="px-3 py-1.5 rounded-xl border transition {{ request('status') === 'OPEN' ? 'bg-red-600 text-white dark:bg-red-950 dark:text-red-300 dark:border-red-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}">
-                Open
-            </a>
-            <a href="{{ route('exceptions.index', ['status' => 'INVESTIGATING']) }}" class="px-3 py-1.5 rounded-xl border transition {{ request('status') === 'INVESTIGATING' ? 'bg-amber-500 text-white dark:bg-amber-950 dark:text-amber-300 dark:border-amber-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}">
-                Investigating
-            </a>
-            <a href="{{ route('exceptions.index', ['status' => 'RESOLVED']) }}" class="px-3 py-1.5 rounded-xl border transition {{ request('status') === 'RESOLVED' ? 'bg-emerald-600 text-white dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}">
-                Resolved
-            </a>
+            <a href="{{ route('exceptions.index', ['status' => '']) }}" class="filter-tab px-3 py-1.5 rounded-xl border transition {{ !request('status') ? 'bg-slate-900 text-white dark:bg-cyan-950 dark:text-cyan-300 dark:border-cyan-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}" data-preserve-scroll data-i18n="ex_all">All</a>
+            <a href="{{ route('exceptions.index', ['status' => 'OPEN']) }}" class="filter-tab px-3 py-1.5 rounded-xl border transition {{ request('status') === 'OPEN' ? 'bg-red-600 text-white dark:bg-red-950 dark:text-red-300 dark:border-red-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}" data-preserve-scroll data-i18n="ex_open">Open</a>
+            <a href="{{ route('exceptions.index', ['status' => 'INVESTIGATING']) }}" class="filter-tab px-3 py-1.5 rounded-xl border transition {{ request('status') === 'INVESTIGATING' ? 'bg-amber-500 text-white dark:bg-amber-950 dark:text-amber-300 dark:border-amber-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}" data-preserve-scroll data-i18n="ex_investigating">Investigating</a>
+            <a href="{{ route('exceptions.index', ['status' => 'RESOLVED']) }}" class="filter-tab px-3 py-1.5 rounded-xl border transition {{ request('status') === 'RESOLVED' ? 'bg-emerald-600 text-white dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-500 font-bold' : 'bg-slate-100 text-slate-600 dark:bg-[#162235] dark:text-slate-300 border-slate-200 dark:border-[#233550]' }}" data-preserve-scroll data-i18n="ex_resolved">Resolved</a>
         </div>
     </div>
 
@@ -91,10 +83,10 @@
                            class="w-full bg-slate-50 dark:bg-[#090D15] border border-slate-200 dark:border-[#1E293B] rounded-xl px-2.5 py-1.5 text-xs text-slate-900 dark:text-white placeholder-slate-400">
                     <div class="flex gap-2">
                         <button type="submit" name="status" value="INVESTIGATING" class="flex-1 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-[11px] shadow-sm transition">
-                            Mark Investigating
+                            <span data-i18n="ex_btn_investigate">Mark Investigating</span>
                         </button>
                         <button type="submit" name="status" value="RESOLVED" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-[11px] shadow-sm transition">
-                            Resolve Case
+                            <span data-i18n="ex_btn_resolve">Resolve Case</span>
                         </button>
                     </div>
                 </form>

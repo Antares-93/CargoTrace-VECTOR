@@ -14,9 +14,22 @@ use Illuminate\Support\Facades\Route;
 | Complies strictly with UAS Web Programming 2 API Contract (Slide 12-13)
 */
 
-// Public Authentication Endpoints
+// Public Authentication & External Telemetry Endpoints
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// External API Telemetry Integration (Weather & Geocoding per Slide 09)
+Route::get('/weather', function (\Illuminate\Http\Request $request, \App\Services\ExternalWeatherService $weatherService) {
+    $lat = (float) $request->input('lat', -6.1017);
+    $lng = (float) $request->input('lng', 106.8833);
+    return response()->json($weatherService->getWeather($lat, $lng));
+});
+
+Route::get('/geocode', function (\Illuminate\Http\Request $request, \App\Services\ExternalGeocodingService $geocodingService) {
+    $query = (string) $request->input('q', 'Jakarta');
+    $res = $geocodingService->geocode($query);
+    return response()->json($res ?? ['status' => 'not_found', 'query' => $query]);
+});
 
 // Authenticated Endpoints (Laravel Sanctum)
 Route::middleware('auth:sanctum')->group(function () {

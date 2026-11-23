@@ -22,7 +22,7 @@
         @if (auth()->check() && (auth()->user()->isAdmin() || auth()->user()->isOperator()))
         <a href="{{ route('shipments.create') }}" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition flex items-center gap-2 whitespace-nowrap">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            <span>Register New Shipment</span>
+            <span data-i18n="register_new_shipment">Register New Shipment</span>
         </a>
         @endif
     </div>
@@ -34,22 +34,22 @@
             <!-- Search -->
             <div class="relative">
                 <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Search identifier, consignee..."
+                       placeholder="Search identifier, consignee..." data-i18n-placeholder="search_placeholder_consignments"
                        class="w-full bg-slate-50 dark:bg-[#0E1522] border border-slate-200 dark:border-[#1F2C42] rounded-xl px-3 py-2 pl-9 text-xs text-slate-800 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500">
                 <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             </div>
 
             <!-- Mode Filter -->
             <select name="mode" class="bg-slate-50 dark:bg-[#0E1522] border border-slate-200 dark:border-[#1F2C42] rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                <option value="all">All Transport Modes</option>
-                <option value="OCEAN" {{ request('mode') === 'OCEAN' ? 'selected' : '' }}>Ocean Lines</option>
-                <option value="AIR" {{ request('mode') === 'AIR' ? 'selected' : '' }}>Air Express</option>
-                <option value="ROAD" {{ request('mode') === 'ROAD' ? 'selected' : '' }}>Road Freight</option>
+                <option value="all" data-i18n="mode_all">All Transport Modes</option>
+                <option value="OCEAN" {{ request('mode') === 'OCEAN' ? 'selected' : '' }} data-i18n="mode_ocean">Ocean Lines</option>
+                <option value="AIR" {{ request('mode') === 'AIR' ? 'selected' : '' }} data-i18n="mode_air">Air Express</option>
+                <option value="ROAD" {{ request('mode') === 'ROAD' ? 'selected' : '' }} data-i18n="mode_road">Road Freight</option>
             </select>
 
             <!-- Status Filter -->
             <select name="status" class="bg-slate-50 dark:bg-[#0E1522] border border-slate-200 dark:border-[#1F2C42] rounded-xl px-3 py-2 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                <option value="all">All Statuses</option>
+                <option value="all" data-i18n="status_all">All Statuses</option>
                 <option value="CREATED" {{ request('status') === 'CREATED' ? 'selected' : '' }}>Created</option>
                 <option value="BOOKED" {{ request('status') === 'BOOKED' ? 'selected' : '' }}>Booked</option>
                 <option value="PICKED_UP" {{ request('status') === 'PICKED_UP' ? 'selected' : '' }}>Picked Up</option>
@@ -83,14 +83,14 @@
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-[#1E293B] text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                        <th class="py-3 px-3">Tracking ID</th>
-                        <th class="py-3 px-3">Mode</th>
-                        <th class="py-3 px-3">Customer / Consignee</th>
+                        <th class="py-3 px-3" data-i18n="tracking_id">Tracking ID</th>
+                        <th class="py-3 px-3" data-i18n="mode">Mode</th>
+                        <th class="py-3 px-3" data-i18n="consignee_carrier">Customer / Consignee</th>
                         <th class="py-3 px-3">Carrier &amp; Vessel/Flight</th>
-                        <th class="py-3 px-3">Route Corridor</th>
-                        <th class="py-3 px-3">Status</th>
-                        <th class="py-3 px-3">ETA &amp; Delay Impact</th>
-                        <th class="py-3 px-3 text-right">Actions</th>
+                        <th class="py-3 px-3" data-i18n="corridor_route">Route Corridor</th>
+                        <th class="py-3 px-3" data-i18n="status">Status</th>
+                        <th class="py-3 px-3" data-i18n="schedule_impact">ETA &amp; Delay Impact</th>
+                        <th class="py-3 px-3 text-right" data-i18n="action">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-[#182338]">

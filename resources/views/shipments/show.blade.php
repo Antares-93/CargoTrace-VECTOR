@@ -514,7 +514,7 @@
         ];
 
         L.polyline(route, {
-            color: '{{ $shipment->transport_mode === 'AIR' ? '#10B981' : '#0284C7' }}',
+            color: '{{ $shipment->transport_mode === 'AIR' ? '#10B981' : '#059669' }}',
             dashArray: '{{ $shipment->transport_mode === 'AIR' ? "5, 7" : "none" }}',
             weight: 4,
             opacity: 0.95
@@ -539,7 +539,7 @@
             @if ($latest->latitude && $latest->longitude)
                 const currentIcon = L.divIcon({
                     className: 'custom-current-marker',
-                    html: `<div class="w-7 h-7 rounded-full {{ $shipment->transport_mode === 'AIR' ? 'bg-emerald-600' : 'bg-cyan-600' }} border-2 border-white shadow-lg flex items-center justify-center text-white transform -translate-x-1/2 -translate-y-1/2 font-bold"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $shipment->transport_mode === 'AIR' ? 'M12 19l9 2-9-18-9 18 9-2zm0 0v-8' : 'M13 10V3L4 14h7v7l9-11h-7z' }}"/></svg></div>`,
+                    html: `<div class="w-7 h-7 rounded-full bg-emerald-600 border-2 border-white shadow-lg flex items-center justify-center text-white transform -translate-x-1/2 -translate-y-1/2 font-bold">@if($shipment->transport_mode === 'AIR')<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>@else<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M1 16l3.5 5h14.5l3-5H1z"/><rect x="4" y="11" width="3" height="4" rx="0.5"/><rect x="8" y="11" width="3" height="4" rx="0.5"/><rect x="12" y="11" width="3" height="4" rx="0.5"/><rect x="6" y="7.5" width="3" height="3" rx="0.5"/><rect x="10" y="7.5" width="3" height="3" rx="0.5"/><path d="M16.5 9h3.5v6h-3.5V9zm.5-3h1.5v2H17V6z"/></svg>@endif</div>`,
                     iconSize: [0, 0]
                 });
 

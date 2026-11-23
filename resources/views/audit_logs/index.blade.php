@@ -6,14 +6,14 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-[#121A28] border border-slate-200/80 dark:border-[#1F2C42] rounded-3xl p-5 sm:p-6 shadow-sm">
         <div>
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                System Security &amp; Activity Audit Trail
+                <span data-i18n="audit_title">System Security &amp; Activity Audit Trail</span>
             </h1>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Immutable chronological log of all consignment changes, tracking updates, and incident resolutions.
+                <span data-i18n="audit_sub">Immutable chronological log of all consignment changes, tracking updates, and incident resolutions.</span>
             </p>
         </div>
         <span class="px-3 py-1 bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-700/50 rounded-xl font-mono font-bold text-xs">
-            {{ $auditLogs->total() }} Logged Entries
+            <span>{{ $auditLogs->total() }}</span> <span data-i18n="audit_logged_entries">Logged Entries</span>
         </span>
     </div>
 
@@ -22,12 +22,12 @@
             <table class="w-full text-left text-xs font-mono">
                 <thead>
                     <tr class="border-b border-slate-200 dark:border-[#1E293B] text-[10px] text-slate-400 uppercase tracking-wider">
-                        <th class="py-3 px-3">Timestamp</th>
-                        <th class="py-3 px-3">Actor / User</th>
-                        <th class="py-3 px-3">Action</th>
-                        <th class="py-3 px-3">Entity</th>
-                        <th class="py-3 px-3">IP Address</th>
-                        <th class="py-3 px-3">Changes / Snapshot</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_time">Timestamp</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_user">Actor / User</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_action">Action</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_entity">Entity</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_ip">IP Address</th>
+                        <th class="py-3 px-3" data-i18n="audit_col_changes">Changes / Snapshot</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-[#182338]">
@@ -59,7 +59,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="py-8 text-center text-slate-400 font-sans">No audit events recorded yet.</td>
+                        <td colspan="6" class="py-8 text-center text-slate-400 font-sans"><span data-i18n="audit_no_events">No audit events recorded yet.</span></td>
                     </tr>
                     @endforelse
                 </tbody>

@@ -7,7 +7,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-[#121A28] border border-slate-200/80 dark:border-[#1F2C42] rounded-3xl p-5 sm:p-6 shadow-sm">
         <div>
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                Global Hubs &amp; Terminal Nodes
+                <span data-i18n="hubs_title">Global Hubs &amp; Terminal Nodes</span>
             </h1>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
                 Strategic seaports, air freight gateways, and transit choke points (Suez, Singapore, Rotterdam).

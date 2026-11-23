@@ -7,9 +7,15 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExceptionController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\Route;
+
+// Public Landing Page (Travel-Agency aesthetic with Vessel & Flight Telemetry)
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
 
 // Public Guest Routes
 Route::middleware('guest')->group(function () {
@@ -26,9 +32,10 @@ Route::get('/demo-login/{role}', [AuthController::class, 'quickLogin'])->name('d
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
+    // Profile View & Update
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     // 1. Dashboard (Radar Overview matching screenshot)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -41,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
 
+    // Incident Desk View (Accessible by Admin, Operator, and Customer viewing own exceptions)
+    Route::get('/incident-desk', [ExceptionController::class, 'index'])->name('exceptions.index');
+    Route::get('/exceptions', [ExceptionController::class, 'index']);
+
     // 4. Operator & Admin Management
     Route::middleware('role:admin,operator')->group(function () {
         Route::get('/consignments/create', [ShipmentController::class, 'create'])->name('shipments.create');
@@ -49,8 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/shipments/{shipment}', [ShipmentController::class, 'update'])->name('shipments.update');
         Route::post('/shipments/{shipment}/tracking', [TrackingController::class, 'store'])->name('shipments.tracking.store');
         
-        // Incident Desk (Exception management)
-        Route::get('/incident-desk', [ExceptionController::class, 'index'])->name('exceptions.index');
+        // Incident Desk Actions
         Route::post('/shipments/{shipment}/exceptions', [ExceptionController::class, 'store'])->name('shipments.exceptions.store');
         Route::patch('/exceptions/{exception}/resolve', [ExceptionController::class, 'resolve'])->name('exceptions.resolve');
     });

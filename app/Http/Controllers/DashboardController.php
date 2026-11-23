@@ -38,11 +38,23 @@ class DashboardController extends Controller
         $carriers = Carrier::where('is_active', true)->get();
         $locations = Location::all();
 
-        // Lead shipment for Radar Display (either focused AT-2026-B8910 or first in transit)
-        $focusShipmentNumber = $request->input('focus', 'AT-2026-B8910');
-        $leadShipment = Shipment::with(['origin', 'destination', 'carrier', 'trackingEvents', 'items', 'exceptions'])
-            ->where('shipment_number', $focusShipmentNumber)
-            ->first() ?? $metrics['shipments']->first();
+        // Lead shipment for Radar Display:
+        // Admin & Operator get full access to all routes. Customer requires entering/selecting a specific consignment.
+        $focusShipmentNumber = $request->input('focus') ?? $request->input('search');
+        if ($user->isCustomer()) {
+            $leadShipment = null;
+            if ($focusShipmentNumber) {
+                $leadShipment = Shipment::with(['origin', 'destination', 'carrier', 'trackingEvents', 'items', 'exceptions'])
+                    ->where('customer_id', $user->id)
+                    ->where('shipment_number', $focusShipmentNumber)
+                    ->first();
+            }
+        } else {
+            $focus = $focusShipmentNumber ?? 'AT-2026-B8910';
+            $leadShipment = Shipment::with(['origin', 'destination', 'carrier', 'trackingEvents', 'items', 'exceptions'])
+                ->where('shipment_number', $focus)
+                ->first() ?? $metrics['shipments']->first();
+        }
 
         return view('dashboard.index', compact(
             'metrics',

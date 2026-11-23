@@ -7,10 +7,10 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white dark:bg-[#121A28] border border-slate-200/80 dark:border-[#1F2C42] rounded-3xl p-5 sm:p-6 shadow-sm">
         <div>
             <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
-                Partner Carrier Registry
+                <span data-i18n="carrier_title">Partner Carrier Registry</span>
             </h1>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                Authorized ocean shipping lines, air freight operators, and intermodal transport partners.
+                <span data-i18n="carrier_sub">Authorized ocean shipping lines, air freight operators, and intermodal transport partners.</span>
             </p>
         </div>
 
@@ -18,7 +18,7 @@
         <button onclick="document.getElementById('modal-carrier').classList.remove('hidden')" 
                 class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            <span>Add New Carrier</span>
+            <span data-i18n="add_carrier">Add New Carrier</span>
         </button>
         @endif
     </div>

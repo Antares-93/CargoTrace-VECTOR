@@ -5,7 +5,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Leaflet](https://img.shields.io/badge/Leaflet-GIS_Radar-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
-[![Tests](https://img.shields.io/badge/PHPUnit-22_Passed_(100%25)-brightgreen?style=for-the-badge&logo=php)](https://phpunit.de)
+[![Tests](https://img.shields.io/badge/PHPUnit-26_Passed_(100%25)-brightgreen?style=for-the-badge&logo=php)](https://phpunit.de)
 
 > **UAS Web Programming 2 — Final Engineering Portfolio Project**  
 > **Brand**: Vector CargoTrace (*"Trace the Line"*)  
@@ -13,7 +13,7 @@
 
 ---
 
-## 📌 Executive Summary
+## Executive Summary
 
 ### Problem
 In international shipping and supply chain logistics, consignment information is heavily fragmented across ocean liners, air cargo carriers, terminal operators, and customs authorities. Cargo owners and logistics coordinators frequently face:
@@ -31,7 +31,7 @@ CargoTrace provides an enterprise-grade visibility and telemetry hub:
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 CargoTrace strictly decouples HTTP transport logic from core business domain rules via a **Service Layer Architecture**:
 
@@ -48,12 +48,13 @@ CargoTrace strictly decouples HTTP transport logic from core business domain rul
               │
               ▼
      [ Service Layer ]
-  ├── ShipmentService        ── Consignment queries, KPIs & manifests
-  ├── TrackingService        ── Chronological events & status transitions
-  ├── EtaService             ── Deterministic delay math & thresholds
-  ├── ExceptionService       ── Incident detection & resolution notes
-  ├── ExternalWeatherService ── Real-time Open-Meteo weather telemetry
-  └── AuditService           ── Security audit trail logging
+  ├── ShipmentService          ── Consignment queries, KPIs & manifests
+  ├── TrackingService          ── Chronological events & status transitions
+  ├── EtaService               ── Deterministic delay math & thresholds
+  ├── ExceptionService         ── Incident detection & resolution notes
+  ├── ExternalWeatherService   ── Real-time Open-Meteo weather telemetry
+  ├── ExternalGeocodingService ── Reverse & Forward Geocoding Nominatim OpenStreetMap
+  └── AuditService             ── Security audit trail logging
               │
               ▼
      [ Eloquent Models ]
@@ -198,7 +199,7 @@ erDiagram
 
 ---
 
-## ⚙️ Core Business Rules
+## Core Business Rules
 
 ### 1. Shipment Status Lifecycle & Terminal State Immutability
 Transitions follow a strict state machine:
@@ -220,7 +221,7 @@ $$\Delta t = \text{estimated\_arrival} - \text{expected\_arrival}$$
 
 ---
 
-## 🎨 UI/UX Design System
+## UI/UX Design System
 
 CargoTrace adheres to the modern Vector identity inspired by high-tech dark radar displays:
 - **Brand Identity**: Vector origami emblem with forest/emerald green theme (`#1E5A3F`, `#166534`, `#10B981`, `#22C55E`).
@@ -231,7 +232,7 @@ CargoTrace adheres to the modern Vector identity inspired by high-tech dark rada
 
 ---
 
-## 🔑 Demo Accounts
+## Demo Accounts
 
 Use these pre-seeded accounts to evaluate different permission levels:
 
@@ -242,11 +243,11 @@ Use these pre-seeded accounts to evaluate different permission levels:
 | **Customer 1** | `customer@cargotrace.com` | `password` | PT Samudera Logistik Mitra (AT-2026-B8910, AWB-772-91024) |
 | **Customer 2** | `transasia@cargotrace.com` | `password` | Trans-Asia Freight Corp (AT-2026-90412) |
 
-> 💡 **Tip**: On the login page, you can click any of the **1-Click Demo Evaluation Roles** buttons to instantly sign in without typing!
+> **Tip**: On the login page, you can click any of the **1-Click Demo Evaluation Roles** buttons to instantly sign in without typing!
 
 ---
 
-## 📡 REST API Specification
+## REST API Specification
 
 All API endpoints return standard JSON responses:
 
@@ -281,11 +282,11 @@ All API endpoints return standard JSON responses:
 | `POST` | `/api/shipments/{id}/exceptions` | Report an operational incident | Operator / Admin |
 | `PATCH` | `/api/exceptions/{id}` | Resolve or investigate an incident | Operator / Admin |
 
-> 📁 **Postman Collection**: Import the file `CargoTrace_Postman_Collection.json` directly into Postman to test all endpoints.
+> **Postman Collection**: Import the file `CargoTrace_Postman_Collection.json` directly into Postman to test all endpoints.
 
 ---
 
-## 🚀 Installation & Local Setup
+## Installation & Local Setup
 
 ### Prerequisites
 - **PHP**: 8.2 or 8.3+ with `pdo_mysql`, `curl`, `mbstring`, `openssl`
@@ -322,7 +323,7 @@ All API endpoints return standard JSON responses:
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
    DB_PORT=3306
-   DB_DATABASE=cargotrace
+   DB_DATABASE=cargotrace_vector
    DB_USERNAME=root
    DB_PASSWORD=
    ```
@@ -340,9 +341,9 @@ All API endpoints return standard JSON responses:
 
 ---
 
-## 🧪 Automated Testing
+## Automated Testing
 
-CargoTrace includes a comprehensive automated test suite (22 unit & feature tests, 60 assertions) testing authorization, CRUD operations, lifecycle state machines, deterministic delay rules, and exception workflows.
+CargoTrace includes a comprehensive automated test suite (26 unit & feature tests, 78 assertions) testing authorization, CRUD operations, lifecycle state machines, deterministic delay rules, external API integrations, and exception workflows.
 
 Run tests using PHPUnit / Artisan:
 ```bash
@@ -358,7 +359,7 @@ php artisan test
 
 ---
 
-## 🌐 External API Integrations
+##  External API Integrations
 
 1. **Open-Meteo Weather API**:
    - `GET https://api.open-meteo.com/v1/forecast`
@@ -369,11 +370,11 @@ php artisan test
 
 ---
 
-## 📚 Attributions & Licenses
+## Attributions & Licenses
 - **Framework**: [Laravel 12](https://laravel.com)
 - **Map Engine**: [Leaflet.js](https://leafletjs.com) & [CartoDB](https://carto.com)
 - **Weather Telemetry**: [Open-Meteo](https://open-meteo.com)
 - **Icons & Styling**: [Tailwind CSS](https://tailwindcss.com) & SVG Vector Logistics Icons
 
 ---
-*Built with ❤️ for Web Programming 2 UAS by a Senior Software Engineer.*
+
