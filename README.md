@@ -66,7 +66,7 @@ CargoTrace strictly decouples HTTP transport logic from core business domain rul
 
 ---
 
-## 📊 Entity Relationship Diagram (ERD) & Data Model
+## Entity Relationship Diagram (ERD) & Data Model
 
 The database schema implements 8 relational models with foreign key constraints, indexes, and cascade protections:
 
