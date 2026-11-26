@@ -21,11 +21,13 @@
     <!-- Center Card Container -->
     <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 p-3.5 sm:p-5 border border-slate-200">
         
-        <!-- Left Side: Cargo Imagery & Multimodal Telemetry Card -->
+        <!-- Left Side: Cargo Imagery & Container Terminal with Green Gradient -->
         <div class="rounded-2xl p-6 sm:p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[460px] md:min-h-[580px] shadow-inner group">
-            <!-- Background Image: Giant Container Vessel with Deep Dark Overlay -->
-            <img src="/images/hero-cargo-ship.jpg" alt="Ocean Cargo Ship" class="absolute inset-0 w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/70 to-emerald-950/80"></div>
+            <!-- Background Image: Shipping Container Terminal & Vessel -->
+            <img src="/images/hero-cargo-ship.jpg" alt="Shipping Containers" class="absolute inset-0 w-full h-full object-cover">
+            <!-- Green Emerald Gradient Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-emerald-950/95 via-emerald-900/60 to-emerald-950/40"></div>
+            <div class="absolute inset-0 bg-emerald-900/15"></div>
 
             <!-- Vector Logo Top Left -->
             <div class="relative z-10 flex items-center gap-3">
@@ -36,42 +38,16 @@
                 </div>
             </div>
 
-            <!-- Center Showcase: Dual Air Express & Ocean Fleet Telemetry Cards -->
-            <div class="relative z-10 my-auto py-6 space-y-3">
-                <!-- Air Express Telemetry Card -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl flex items-center gap-3.5 shadow-xl hover:bg-white/15 transition">
-                    <img src="/images/airplane_sky.jpg" alt="Air Cargo Plane" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/30 shadow-sm">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                            <span class="text-[9px] font-mono uppercase tracking-wider text-cyan-300 font-bold">Air Express Fleet</span>
-                        </div>
-                        <span class="text-xs font-extrabold text-white truncate block">Boeing 777F • Flight QR-803F</span>
-                        <span class="text-[10px] text-slate-300 font-mono">485 Kts • Trans-Eurasian Skyway</span>
-                    </div>
-                </div>
-
-                <!-- Ocean Lead Vessel Card -->
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl flex items-center gap-3.5 shadow-xl hover:bg-white/15 transition">
-                    <img src="/images/hero-ship.jpg" alt="Ocean Container Vessel" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/30 shadow-sm">
-                    <div class="min-w-0">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                            <span class="text-[9px] font-mono uppercase tracking-wider text-emerald-300 font-bold">Ocean Freight Lead</span>
-                        </div>
-                        <span class="text-xs font-extrabold text-white truncate block">Maersk Mc-Kinney • 18,270 TEU</span>
-                        <span class="text-[10px] text-slate-300 font-mono">21.4 Kts • Malacca Strait Corridor</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Bottom Motivational Tagline -->
-            <div class="relative z-10 space-y-1.5 mt-auto">
-                <p class="text-[11px] font-medium text-emerald-300 uppercase tracking-widest font-mono">Global Multimodal Telemetry</p>
-                <h2 class="text-xl sm:text-2xl font-extrabold leading-tight tracking-tight text-white">
+            <div class="relative z-10 space-y-2 mt-auto">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-bold backdrop-blur-sm border border-emerald-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Global Multimodal Telemetry
+                </span>
+                <h2 class="text-xl sm:text-2xl font-extrabold leading-tight tracking-tight text-white drop-shadow-sm">
                     Experience The Magic Of Global Cargo Visibility
                 </h2>
-                <p class="text-[11px] text-slate-300/90 pt-1 leading-relaxed">
+                <p class="text-xs text-emerald-100/90 pt-1 leading-relaxed">
                     Real-time container ship AIS and air express ADS-B flight telemetry in one unified operations platform.
                 </p>
             </div>
@@ -106,7 +82,7 @@
                 @csrf
                 <div>
                     <label class="block text-xs font-semibold text-slate-700 mb-1">Your email</label>
-                    <input type="email" name="email" value="{{ old('email', 'admin@cargotrace.com') }}" required
+                    <input type="email" name="email" value="{{ old('email') }}" required
                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm transition placeholder:text-slate-400"
                            placeholder="name@company.com">
                 </div>
@@ -116,7 +92,7 @@
                         <label class="block text-xs font-semibold text-slate-700">Password</label>
                     </div>
                     <div class="relative">
-                        <input id="login-password" type="password" name="password" value="password" required
+                        <input id="login-password" type="password" name="password" value="" required
                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm transition pr-10"
                                placeholder="••••••••">
                         <button type="button" onclick="const p = document.getElementById('login-password'); p.type = p.type === 'password' ? 'text' : 'password';" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600">
