@@ -7,8 +7,7 @@
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Tests](https://img.shields.io/badge/PHPUnit-34_Passed_(100%25)-brightgreen?style=for-the-badge&logo=php)](https://phpunit.de)
 [![Cloudflare](https://img.shields.io/badge/Cloudflare_Tunnel-Live_Online-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://cloudflare.com)
-
-> **UAS Web Programming 2 — Final Engineering Portfolio Project**  
+ 
 > **Brand**: Vector CargoTrace (*"Trace the Line"*)  
 > **Repository**: [https://github.com/Antares-93/CargoTrace-VECTOR](https://github.com/Antares-93/CargoTrace-VECTOR)  
 > **Architecture**: Clean Service-Oriented Laravel Architecture with Multi-Role RBAC, Leaflet GIS Radar, Live Weather Integration, Multi-Language (ID/EN) Switcher, User Profile Management, and RESTful Sanctum API.
