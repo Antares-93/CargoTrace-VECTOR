@@ -586,16 +586,8 @@
                 add_node: "Add New Terminal",
 
                 // Audit Logs
-                audit_title: "Catatan Audit Aktivitas & Keamanan",
-                audit_sub: "Rekaman kronologis yang tidak dapat diubah dari seluruh perubahan konsinyasi, pembaruan pelacakan, dan resolusi insiden.",
-                audit_logged_entries: "Entri Tercatat",
-                audit_col_time: "Waktu Kejadian",
-                audit_col_user: "Pengguna / Pelaku",
-                audit_col_action: "Aksi",
-                audit_col_entity: "Entitas",
-                audit_col_ip: "Alamat IP",
-                audit_col_changes: "Perubahan Data / Snapshot",
-                audit_no_events: "Belum ada catatan audit yang terekam.",
+                audit_title: "System Security & Activity Audit Trail",
+                audit_sub: "Immutable chronological log of all consignment changes, tracking updates, and incident resolutions.",
                 audit_logged_entries: "Logged Entries",
                 audit_col_time: "Timestamp",
                 audit_col_user: "Actor / User",
@@ -818,8 +810,16 @@
                 add_node: "Tambah Titik Baru",
 
                 // Audit Logs
-                audit_title: "Catatan Audit Sistem & Kepatuhan",
-                audit_sub: "Rekaman jejak aktivitas dan modifikasi data yang tidak dapat diubah (immutable).",
+                audit_title: "Catatan Audit Aktivitas & Keamanan",
+                audit_sub: "Rekaman kronologis yang tidak dapat diubah dari seluruh perubahan konsinyasi, pembaruan pelacakan, dan resolusi insiden.",
+                audit_logged_entries: "Entri Tercatat",
+                audit_col_time: "Waktu Kejadian",
+                audit_col_user: "Pengguna / Pelaku",
+                audit_col_action: "Aksi",
+                audit_col_entity: "Entitas",
+                audit_col_ip: "Alamat IP",
+                audit_col_changes: "Perubahan Data / Snapshot",
+                audit_no_events: "Belum ada catatan audit yang terekam.",
 
                 // Partners Wall
                 partners_title: "MITRA & ALIANSI KAMI",

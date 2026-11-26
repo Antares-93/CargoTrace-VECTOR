@@ -18,41 +18,69 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-slate-100">
 
-    <!-- Center Card Container (matching Image 2) -->
+    <!-- Center Card Container -->
     <div class="bg-white rounded-3xl shadow-2xl overflow-hidden max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 p-3.5 sm:p-5 border border-slate-200">
         
-        <!-- Left Side: Ambient Gradient Card (Image 2 style) -->
-        <div class="rounded-2xl p-8 sm:p-10 flex flex-col justify-between text-white relative overflow-hidden min-h-[380px] md:min-h-[540px] shadow-inner"
-             style="background: linear-gradient(135deg, #1E3A8A 0%, #166534 50%, #047857 100%);">
-            <!-- Ambient blurred lighting spots -->
-            <div class="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-cyan-400 opacity-30 blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-20 -right-20 w-72 h-72 rounded-full bg-emerald-400 opacity-25 blur-3xl pointer-events-none"></div>
+        <!-- Left Side: Cargo Imagery & Multimodal Telemetry Card -->
+        <div class="rounded-2xl p-6 sm:p-8 flex flex-col justify-between text-white relative overflow-hidden min-h-[460px] md:min-h-[580px] shadow-inner group">
+            <!-- Background Image: Giant Container Vessel with Deep Dark Overlay -->
+            <img src="/images/hero-cargo-ship.jpg" alt="Ocean Cargo Ship" class="absolute inset-0 w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/70 to-emerald-950/80"></div>
 
-            <!-- Vector Emblem Top Left -->
+            <!-- Vector Logo Top Left -->
             <div class="relative z-10 flex items-center gap-3">
                 <img src="/images/vector-logo-icon.png" alt="Vector Logo" class="w-10 h-10 object-contain brightness-0 invert drop-shadow">
                 <div>
                     <span class="font-black text-xl tracking-wider">VECTOR</span>
-                    <span class="text-[10px] block font-mono text-emerald-200 tracking-widest uppercase">CargoTrace</span>
+                    <span class="text-[10px] block font-mono text-emerald-300 tracking-widest uppercase">CargoTrace</span>
                 </div>
             </div>
 
-            <!-- Bottom Motivational Tagline (Image 2) -->
-            <div class="relative z-10 space-y-2 mt-auto">
-                <p class="text-xs font-medium text-emerald-200 uppercase tracking-widest font-mono">You can easily</p>
-                <h2 class="text-2xl sm:text-3xl font-extrabold leading-tight tracking-tight text-white">
-                    Get access your personal hub for clarity and productivity
+            <!-- Center Showcase: Dual Air Express & Ocean Fleet Telemetry Cards -->
+            <div class="relative z-10 my-auto py-6 space-y-3">
+                <!-- Air Express Telemetry Card -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl flex items-center gap-3.5 shadow-xl hover:bg-white/15 transition">
+                    <img src="/images/airplane_sky.jpg" alt="Air Cargo Plane" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/30 shadow-sm">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-cyan-300 font-bold">Air Express Fleet</span>
+                        </div>
+                        <span class="text-xs font-extrabold text-white truncate block">Boeing 777F • Flight QR-803F</span>
+                        <span class="text-[10px] text-slate-300 font-mono">485 Kts • Trans-Eurasian Skyway</span>
+                    </div>
+                </div>
+
+                <!-- Ocean Lead Vessel Card -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 p-3 rounded-2xl flex items-center gap-3.5 shadow-xl hover:bg-white/15 transition">
+                    <img src="/images/hero-ship.jpg" alt="Ocean Container Vessel" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/30 shadow-sm">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                            <span class="text-[9px] font-mono uppercase tracking-wider text-emerald-300 font-bold">Ocean Freight Lead</span>
+                        </div>
+                        <span class="text-xs font-extrabold text-white truncate block">Maersk Mc-Kinney • 18,270 TEU</span>
+                        <span class="text-[10px] text-slate-300 font-mono">21.4 Kts • Malacca Strait Corridor</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Motivational Tagline -->
+            <div class="relative z-10 space-y-1.5 mt-auto">
+                <p class="text-[11px] font-medium text-emerald-300 uppercase tracking-widest font-mono">Global Multimodal Telemetry</p>
+                <h2 class="text-xl sm:text-2xl font-extrabold leading-tight tracking-tight text-white">
+                    Experience The Magic Of Global Cargo Visibility
                 </h2>
-                <p class="text-xs text-slate-200/80 pt-2 leading-relaxed">
-                    Real-time global shipment visibility, AIS vessel &amp; ADS-B radar, and intelligent delay telemetry.
+                <p class="text-[11px] text-slate-300/90 pt-1 leading-relaxed">
+                    Real-time container ship AIS and air express ADS-B flight telemetry in one unified operations platform.
                 </p>
             </div>
         </div>
 
-        <!-- Right Side: Form (Image 2 style) -->
+        <!-- Right Side: Clean Login Form -->
         <div class="p-6 sm:p-10 flex flex-col justify-center">
             
-            <!-- Mini Logo (Simple, monochrome, uncolored) -->
+            <!-- Mini Logo (Simple, monochrome) -->
             <div class="mb-4">
                 <img src="/images/vector-logo-icon.png" alt="Vector" class="w-8 h-8 object-contain brightness-0 opacity-90">
             </div>
@@ -104,37 +132,16 @@
                     </label>
                 </div>
 
-                <button type="submit" class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2">
+                <button type="submit" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2">
                     <span>Sign In</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </form>
 
-            <!-- Quick Demo 1-Click Access Pill Bar (Crucial for Reviewers/Dosen!) -->
-            <div class="mt-6 pt-5 border-t border-slate-100">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 text-center mb-2.5">
-                    1-Click Demo Evaluation Roles
-                </p>
-                <div class="grid grid-cols-3 gap-2 text-center text-xs">
-                    <a href="{{ route('demo.login', 'admin') }}" class="p-2 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition font-bold block">
-                        Apex Admin
-                        <span class="block text-[9px] font-normal text-purple-600">Full Access</span>
-                    </a>
-                    <a href="{{ route('demo.login', 'operator') }}" class="p-2 rounded-lg bg-cyan-50 text-cyan-700 border border-cyan-200 hover:bg-cyan-100 transition font-bold block">
-                        Operator
-                        <span class="block text-[9px] font-normal text-cyan-600">Events &amp; Desks</span>
-                    </a>
-                    <a href="{{ route('demo.login', 'customer') }}" class="p-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition font-bold block">
-                        Customer
-                        <span class="block text-[9px] font-normal text-emerald-600">My Shipments</span>
-                    </a>
-                </div>
-            </div>
-
             <!-- Footer link -->
             <div class="text-center mt-6 text-xs text-slate-500">
                 Don't have an account? 
-                <a href="{{ route('register') }}" class="font-bold text-indigo-600 hover:underline">Sign up</a>
+                <a href="{{ route('register') }}" class="font-bold text-emerald-600 hover:underline">Sign up</a>
             </div>
 
         </div>
