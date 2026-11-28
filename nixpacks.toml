@@ -1,0 +1,3 @@
+# Nixpacks configuration for Railway
+[phases.setup]
+nixPkgs = ["php82Extensions.pdo", "php82Extensions.pdo_mysql"]
