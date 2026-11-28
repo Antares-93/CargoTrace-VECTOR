@@ -1,3 +1,6 @@
 # Nixpacks configuration for Railway
+[providers.php]
+extensions = ["pdo", "pdo_mysql", "mbstring", "openssl", "filter", "hash", "session", "tokenizer"]
+
 [phases.setup]
-nixPkgs = ["php82Extensions.pdo", "php82Extensions.pdo_mysql"]
+nixPkgs = ["php82", "php82Extensions.pdo", "php82Extensions.pdo_mysql"]
