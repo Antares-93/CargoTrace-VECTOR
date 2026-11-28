@@ -6,7 +6,7 @@
 [![Leaflet](https://img.shields.io/badge/Leaflet-GIS_Radar-199900?style=for-the-badge&logo=leaflet&logoColor=white)](https://leafletjs.com)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Tests](https://img.shields.io/badge/PHPUnit-34_Passed_(100%25)-brightgreen?style=for-the-badge&logo=php)](https://phpunit.de)
-[![Cloudflare](https://img.shields.io/badge/Cloudflare_Tunnel-Live_Online-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://cloudflare.com)
+[![Railway](https://img.shields.io/badge/Railway-Production_Ready-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
  
 > **Brand**: Vector CargoTrace (*"Trace the Line"*)  
 > **Repository**: [https://github.com/Antares-93/CargoTrace-VECTOR](https://github.com/Antares-93/CargoTrace-VECTOR)  
@@ -274,23 +274,37 @@ $$\Delta t = \text{estimated\_arrival} - \text{expected\_arrival}$$
 
 ---
 
-## Live Online Deployment & Hosting
+## Production Deployment (Railway / Cloud PaaS)
 
-### Option 1: Instant Live Public URL via Cloudflare Tunnel (1-Click)
-The repository includes an automated tunnel launcher:
-1. Ensure XAMPP (MySQL) is running.
-2. Run the script:
-   ```bash
-   python share.py
-   # Or double-click: ONLINE-KAN-WEBSITE.bat
-   ```
-3. An active public HTTPS URL (`https://xxxx.trycloudflare.com`) is generated immediately and copied to your clipboard. Anyone can access the full live application with zero authentication barriers or anti-bot checks.
+Aplikasi telah sepenuhnya siap untuk mode produksi (*Production-Ready*) dan dioptimalkan untuk platform seperti **Railway**, **Render**, atau PaaS sejenis:
 
-### Option 2: 24/7 Cloud Deployment (Render.com / Docker)
-The application can also be deployed permanently on cloud platforms:
-- Connect the GitHub repository `Antares-93/CargoTrace-VECTOR` to Render.
-- Set build command: `composer install --no-dev --optimize-autoloader && npm install && npm run build`
-- Set start command: `php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT`
+### 1. Konfigurasi Environment & Database
+- **Port Dinamis**: Aplikasi otomatis mendengarkan port dari variabel sistem `$PORT` yang disuntikkan secara otomatis oleh Railway.
+- **Database Terkoneksi ke Environment Variables**: Tidak ada IP `127.0.0.1` atau `localhost` yang di-hardcode. Aplikasi mendukung variabel tunggal `DATABASE_URL` / `MYSQL_URL` dari Railway Database Plugin maupun format individual (`DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE`).
+- **File Konfigurasi Server (`Procfile`)**:
+  ```procfile
+  web: php artisan serve --host=0.0.0.0 --port=$PORT
+  ```
+
+### 2. Langkah Deploy ke Railway
+1. **Push ke GitHub**: Pastikan repository GitHub `Antares-93/CargoTrace-VECTOR` sudah ter-update.
+2. **Buat Project Baru di [Railway](https://railway.com/)**:
+   - Klik **New Project** > **Deploy from GitHub repo**.
+   - Pilih repository `CargoTrace-VECTOR`.
+3. **Tambahkan Layanan Database (MySQL)**:
+   - Di dashboard Railway, klik **+ New** > **Database** > **Add MySQL**.
+   - Hubungkan database ke layanan aplikasi (Railway akan otomatis menyuntikkan `DATABASE_URL` dan variabel koneksi).
+4. **Atur Environment Variables di Railway**:
+   - `APP_ENV` = `production`
+   - `APP_DEBUG` = `false`
+   - `APP_KEY` = (Gunakan hasil dari `php artisan key:generate --show`)
+   - `APP_URL` = `https://<domain-proyek-anda>.railway.app`
+5. **Jalankan Migrasi & Database Seeder**:
+   - Di tab **Variables** atau menu **Exec/Command Console** Railway, jalankan:
+     ```bash
+     php artisan migrate --force --seed
+     ```
+6. Aplikasi langsung aktif dan dapat diakses publik 24/7!
 
 ---
 
